@@ -2,13 +2,30 @@ const User = require('../models/user.model.js')
 const { hash, compare } = require('../utils/hash.util.js')
 const { sign, decode, generateRandToken } = require('../utils/token.util.js')
 
-const refreshToken = (req, res) => {
-    const { authorization } = req.headers
-    if (!authorization) {
-        return res.error('unauthorized', new Error('unauthorized'), 400)
+const refreshToken = async (req, res) => {
+    const { refreshToken } = req.body
+    if (!refreshToken) {
+        return res.error('unauthorized', new Error('unauthorized'), 401)
     }
+    try {
+        const { userId } = decode(refreshToken)
+        const user = await User.findByPk(userId)
+        if (!user) {
+            return res.error('unauthorized', new Error('unauthorized'), 401)
+        }
+        const accessToken = await sign({ userId: existUser.id }, '1w')
+        const { id, first_name, last_name } = user
+        res.success('ok', {
+            accessToken,
+            refreshToken,
+            user: {
+                id, email, first_name, last_name
+            }
+        })
 
+    } catch (error) {
 
+    }
 }
 
 const register = async (req, res) => {
@@ -45,7 +62,7 @@ const login = async (req, res) => {
         const accessToken = await sign({ userId: existUser.id }, '1w')
         let refreshToken = ""
         if (!existUser.refresh_token) {
-            refreshToken = await sign(await generateRandToken(), '30days')
+            refreshToken = await sign({ userId: existUser.id }, '30d')
             await User.updateUserRefreshToken(existUser.id, refreshToken)
         } else {
             refreshToken = existUser.refresh_token
@@ -59,6 +76,7 @@ const login = async (req, res) => {
             }
         })
     } catch (error) {
+        console.error(error)
         res.error('internal error', error)
     }
 }
@@ -75,6 +93,7 @@ const listAllUsers = async (req, res) => {
 
 
 module.exports = {
+    refreshToken,
     register,
     listAllUsers,
     login

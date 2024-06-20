@@ -2,13 +2,15 @@ const Note = require('../models/note.model')
 
 const create = async (req, res) => {
     try {
+        const { id } = req.user
         const { title = 'new note', description = '' } = req.body
         const newNote = Note.build({
             title,
-            description
+            description,
+            creator_id: id
         })
-        const data = await newNote.save()
-        res.success('', data, 200)
+        await newNote.save()
+        res.success('', newNote, 200)
     } catch (error) {
         res.error('internal error', error, 500);
     }

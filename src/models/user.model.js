@@ -58,7 +58,9 @@ User.init({
     sequelize: db,
     timestamps: true,
     modelName: 'users'
-}
-)
+})
+
+
+
 
 module.exports = User

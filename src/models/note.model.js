@@ -1,6 +1,6 @@
 const { DataTypes, Model } = require('sequelize')
 const db = require('../database/db')
-
+const User = require('./user.model')
 class Note extends Model { }
 
 Note.init({
@@ -23,11 +23,26 @@ Note.init({
     updatedAt: {
         field: 'updated_at',
         type: DataTypes.DATE
+    },
+    creator_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: 'users',
+            key: 'id'
+        }
     }
 }, {
     sequelize: db,
     modelName: 'notes',
     timestamps: true
+})
+
+User.hasMany(Note, {
+    foreignKey: 'creator_id'
+})
+Note.belongsTo(User, {
+    foreignKey: 'creator_id'
 })
 
 module.exports = Note

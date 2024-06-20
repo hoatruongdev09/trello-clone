@@ -8,6 +8,8 @@ const responseMiddleware = require('./src/middlewares/response.middleware.js')
 
 const authRoute = require('./src/routes/auth.route.js')
 const noteRoute = require('./src/routes/note.route.js')
+const userRoute = require('./src/routes/user.route.js')
+const boardRoute = require('./src/routes/board.route.js')
 
 const app = express()
 app.use(bodyParser.json())
@@ -17,6 +19,8 @@ app.use(responseMiddleware)
 
 app.use('/v1/auth', authRoute)
 app.use('/v1/note', noteRoute)
+app.use('/v1/user', userRoute)
+app.use('/v1/board', boardRoute)
 
 app.get('/', (req, res) => {
     res.status(200).send('hey hey')
