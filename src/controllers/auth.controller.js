@@ -1,6 +1,6 @@
 const User = require('../models/user.model.js')
 const { hash, compare } = require('../utils/hash.util.js')
-const { sign, decode, generateRandToken } = require('../utils/token.util.js')
+const { sign, decode } = require('../utils/token.util.js')
 
 const refreshToken = async (req, res) => {
     const { refreshToken } = req.body
