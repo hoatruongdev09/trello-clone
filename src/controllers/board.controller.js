@@ -19,7 +19,7 @@ const createBoard = async (req, res) => {
         const data = await newBoard.save();
         res.success('ok', data)
     } catch (error) {
-        res.error('internal error', error, 500);
+        res.error('internal-error', error, 500);
     }
 }
 
@@ -29,7 +29,7 @@ const updateBoard = async (req, res) => {
         const { name, description } = req.body
         const board = await Board.findByPk(id)
         if (!board) {
-            res.error('Board is not found', new Error('Board is not found'), 404)
+            res.error('board-is-not-found', new Error('board-is-not-found'), 404)
         }
         board.name = name
         board.description = description
@@ -40,7 +40,7 @@ const updateBoard = async (req, res) => {
         })
     } catch (error) {
         console.log(error)
-        res.error('internal error', error, 500);
+        res.error('internal-error', error, 500);
     }
 }
 
@@ -51,12 +51,12 @@ const getBoardInfo = async (req, res) => {
         const { id } = req.params
         const board = await Board.findByPk(id)
         if (!board) {
-            res.error('Board is not found', new Error('Board is not found'), 404)
+            res.error('board-is-not-found', new Error('board-is-not-found'), 404)
         }
         const { admin_id } = board
         const admin = await User.findByPk(admin_id)
         if (!admin) {
-            res.error('Board admin is not found', new Error('Board admin is not found'), 404)
+            res.error('board-admin-is-not-found', new Error('board-admin-is-not-found'), 404)
         }
         const data = {
             id: board.id,
@@ -72,7 +72,7 @@ const getBoardInfo = async (req, res) => {
         }
         res.success('ok', data)
     } catch (error) {
-        res.error('internal error', error, 500);
+        res.error('internal-error', error, 500);
     }
 }
 
@@ -83,7 +83,7 @@ const closeBoard = async (req, res) => {
         console.log(`board id: ${board_id}`)
         const board = await Board.findByPk(board_id)
         if (!board) {
-            return res.error('Board is not found', new Error('Board is not found'), 404)
+            return res.error('board-is-not-found', new Error('board-is-not-found'), 404)
         }
         if (id !== board.admin_id) {
             return res.error('unauthorize',
@@ -100,7 +100,7 @@ const closeBoard = async (req, res) => {
         })
     } catch (error) {
         // console.log(error)
-        res.error('internal error', error, 500);
+        res.error('internal-error', error, 500);
     }
 }
 
@@ -110,7 +110,7 @@ const openBoard = async (req, res) => {
         const { board_id } = req.params
         const board = await Board.findByPk(board_id)
         if (!board) {
-            return res.error('Board is not found', new Error('Board is not found'), 404)
+            return res.error('board-is-not-found', new Error('board-is-not-found'), 404)
         }
         if (id !== board.admin_id) {
             return res.error('unauthorize',
@@ -127,7 +127,7 @@ const openBoard = async (req, res) => {
         })
     } catch (error) {
         console.log(error)
-        res.error('internal error', error, 500);
+        res.error('internal-error', error, 500);
     }
 }
 
@@ -137,7 +137,7 @@ const addList = async (req, res) => {
         const { name } = req.body
         const board = await Board.findByPk(board_id)
         if (!board) {
-            return res.error('Board is not found', new Error('Board is not found'), 404)
+            return res.error('board-is-not-found', new Error('board-is-not-found'), 404)
         }
         const index = board.listIndex++;
         const list = BoardList.build({
@@ -150,7 +150,7 @@ const addList = async (req, res) => {
         res.success('ok', data)
     } catch (error) {
         console.error(error)
-        res.error('internal error', error, 500);
+        res.error('internal-error', error, 500);
     }
 }
 
@@ -160,7 +160,7 @@ const getBoardLists = async (req, res) => {
         const { board_id } = req.params
         const board = await Board.findByPk(board_id)
         if (!board) {
-            return res.error('Board is not found', new Error('Board is not found'), 404)
+            return res.error('board-is-not-found', new Error('board-is-not-found'), 404)
         }
         const boardList = await BoardList.findAll({
             where: {
@@ -170,7 +170,7 @@ const getBoardLists = async (req, res) => {
         res.success('ok', boardList)
 
     } catch (error) {
-        res.error('internal error', error, 500);
+        res.error('internal-error', error, 500);
     }
 }
 
@@ -179,7 +179,7 @@ const getNotesOfList = async (req, res) => {
         const { list_id } = req.params
         const boardList = await BoardList.findByPk(list_id)
         if (!boardList) {
-            return res.error('List is not found', new Error('List is not found'), 404)
+            return res.error('list-is-not-found', new Error('list-is-not-found'), 404)
         }
         const notes = await Note.findAll({
             where: {
@@ -189,7 +189,7 @@ const getNotesOfList = async (req, res) => {
         res.success('ok', notes)
 
     } catch (error) {
-        res.error('internal error', error, 500);
+        res.error('internal-error', error, 500);
     }
 }
 
@@ -199,14 +199,14 @@ const updateList = async (req, res) => {
         const { list_name } = req.body
         const list = await BoardList.findByPk(list_id)
         if (!list) {
-            return res.error('List is not found', new Error('List is not found'), 404)
+            return res.error('list-is-not-found', new Error('list-is-not-found'), 404)
         }
         list.name = list_name
         const data = await list.save();
         res.success('ok', data)
 
     } catch (error) {
-        res.error('internal error', error, 500);
+        res.error('internal-error', error, 500);
     }
 }
 

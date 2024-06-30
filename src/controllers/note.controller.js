@@ -15,7 +15,7 @@ const create = async (req, res) => {
         await newNote.save()
         res.success('', newNote)
     } catch (error) {
-        res.error('internal error', error);
+        res.error('internal-error', error);
     }
 }
 
@@ -24,7 +24,7 @@ const listAll = async (req, res) => {
         const notes = await Note.findAll()
         res.success('', notes)
     } catch (error) {
-        res.error('internal error', error);
+        res.error('internal-error', error);
     }
 }
 
@@ -33,11 +33,11 @@ const getNoteDetail = async (req, res) => {
         const { id } = req.params
         const note = await Note.findByPk(id)
         if (!note) {
-            return res.error("note is note found", null, 404)
+            return res.error("note-is-not-found", null, 404)
         }
         res.success('', note)
     } catch (error) {
-        res.error('internal error', error);
+        res.error('internal-error', error);
     }
 }
 
@@ -51,7 +51,7 @@ const removeNote = async (req, res) => {
         })
         res.success('ok', null)
     } catch (error) {
-        res.error('internal error', error);
+        res.error('internal-error', error);
     }
 }
 
@@ -61,14 +61,14 @@ const updateNote = async (req, res) => {
         const { title, description } = req.body
         const note = await Note.findByPk(id)
         if (!note) {
-            return res.error("note is not found", null, 404)
+            return res.error("note-is-not-found", null, 404)
         }
         note.title = title
         note.description = description
         const data = await note.save()
         res.success('ok', note)
     } catch (error) {
-        res.error('internal error', error);
+        res.error('internal-error', error);
     }
 }
 
@@ -77,17 +77,17 @@ const moveNoteToList = async (req, res) => {
         const { note_id, list_id } = req.body
         const note = await Note.findByPk(note_id)
         if (!note) {
-            return res.error("note is not found", null, 404)
+            return res.error("note-is-not-found", null, 404)
         }
         const boardList = await BoardList.findByPk(list_id)
         if (!boardList) {
-            return res.error("list is not found", null, 404)
+            return res.error("list-is-not-found", null, 404)
         }
         note.boardListId = list_id
         const data = await note.save()
         res.success('ok', data)
     } catch (error) {
-        res.error('internal error', error);
+        res.error('internal-error', error);
     }
 }
 

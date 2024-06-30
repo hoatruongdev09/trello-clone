@@ -33,7 +33,7 @@ const register = async (req, res) => {
         const { email, first_name, last_name, password } = req.body
         const existUser = await User.findUserByEmail(email)
         if (existUser) {
-            return res.error('account is existed', new Error('account is existed'), 409)
+            return res.error('account-is-existed', new Error('account-is-existed'), 409)
         }
         const hashPassword = await hash(password)
         const user = User.build({
@@ -45,7 +45,7 @@ const register = async (req, res) => {
         const data = await user.save();
         res.success('ok', data)
     } catch (error) {
-        res.error('internal error', error)
+        res.error('internal-error', error)
     }
 }
 
@@ -54,10 +54,10 @@ const login = async (req, res) => {
         const { email, password } = req.body
         const existUser = await User.findUserByEmail(email)
         if (!existUser) {
-            return res.error('user does not exist', new Error('user does not exist'), 404)
+            return res.error('user-is-not-found', new Error('user-is-not-found'), 404)
         }
         if (!await compare(password, existUser.password)) {
-            return res.error('password not match', new Error('password not match'), 400)
+            return res.error('password-is-not-match', new Error('password-is-not-match'), 400)
         }
         const accessToken = await sign({ userId: existUser.id }, '1w')
         let refreshToken = ""
@@ -77,7 +77,7 @@ const login = async (req, res) => {
         })
     } catch (error) {
         console.error(error)
-        res.error('internal error', error)
+        res.error('internal-error', error)
     }
 }
 
@@ -86,7 +86,7 @@ const listAllUsers = async (req, res) => {
         const allUser = await User.findAll()
         res.success('ok', allUser)
     } catch (error) {
-        res.error('internal error', error)
+        res.error('internal-error', error)
     }
 }
 

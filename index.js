@@ -1,5 +1,6 @@
 const bodyParser = require('body-parser')
 const express = require('express')
+const cors = require('cors')
 
 const db = require('./src/database/db.js')
 db.sync()
@@ -12,6 +13,13 @@ const userRoute = require('./src/routes/user.route.js')
 const boardRoute = require('./src/routes/board.route.js')
 
 const app = express()
+
+const corsOptions = {
+    origin: 'http://localhost:3000',//(https://your-client-app.com)
+    optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions))
+
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 
